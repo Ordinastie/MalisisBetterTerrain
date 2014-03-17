@@ -5,12 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.malisis.bt.MalisisBetterTerrain;
 import net.malisis.bt.renderer.ShapedBlockRenderer;
 import net.malisis.core.block.ProxyBlock;
-import net.malisis.core.renderer.element.Shape;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFluid;
 import net.minecraft.entity.Entity;
@@ -21,6 +18,8 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ShapedBlock extends ProxyBlock
 {
@@ -424,7 +423,7 @@ public class ShapedBlock extends ProxyBlock
 
     public float getAmbientOcclusionLightValue(IBlockAccess world, int x, int y, int z)
     {
-        return this.shaped ? 1.0F : 0.2F;
+        return this.shaped ? 0.4F : 0.2F;
     }
 
     @Override
