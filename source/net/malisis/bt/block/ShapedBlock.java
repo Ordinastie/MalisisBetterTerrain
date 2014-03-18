@@ -83,7 +83,8 @@ public class ShapedBlock extends ProxyBlock
         boolean west = shouldConnect(world, x - 1, y, z, ForgeDirection.EAST);
         boolean east = shouldConnect(world, x + 1, y, z, ForgeDirection.WEST);
         boolean bottom = shouldConnect(world, x, y - 1, z, ForgeDirection.UP);
-        boolean top = shouldConnect(world, x, y + 1, z, ForgeDirection.DOWN);
+        //boolean top = shouldConnect(world, x, y + 1, z, ForgeDirection.DOWN);
+        boolean top = !world.isAirBlock(x, y + 1, z);
 
         int fSouth = getBlockShape(world, x, y, z + 1);
         int fNorth = getBlockShape(world, x, y, z - 1);
