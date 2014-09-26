@@ -1,182 +1,148 @@
 package net.malisis.bt.renderer;
 
-import net.malisis.bt.block.ShapedBlock;
+import net.malisis.bt.block.IShapedBlock;
+import net.malisis.bt.block.ShapedBlockManager;
+import net.malisis.bt.block.ShapedGrass;
 import net.malisis.core.renderer.BaseRenderer;
+import net.malisis.core.renderer.RenderParameters;
 import net.malisis.core.renderer.element.Face;
-import net.malisis.core.renderer.element.RenderParameters;
 import net.malisis.core.renderer.element.Shape;
+import net.malisis.core.renderer.preset.ShapePreset;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockGrass;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.ForgeDirection;
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import net.minecraftforge.common.util.ForgeDirection;
 
-public class ShapedBlockRenderer extends BaseRenderer implements
-		ISimpleBlockRenderingHandler
+public class ShapedBlockRenderer extends BaseRenderer
 {
 	public static int renderId = 0;
-	protected ShapedBlock block;
 	private int colorMultiplier;
 	private boolean isGrassBlock = false;
 	private boolean grassSideOverlay = false;
-	private Icon grassOverlayIcon = null;
+	private IIcon grassOverlayIcon = null;
+
+	@Override
+	protected void initParameters()
+	{
+		rp = new RenderParameters();
+		rp.useBlockBounds.set(false);
+		rp.useBlockBrightness.set(true);
+	}
 
 	/**
-	 * Overridden because of the case where to block of the same slope next to
-	 * each other shouldn't cast any shadow
+	 * Overridden because of the case where two block of the same slope next to each other shouldn't cast any shadow
 	 */
+	@Override
 	protected float getBlockAmbientOcclusion(IBlockAccess world, int x, int y, int z)
 	{
-		Block block = Block.blocksList[world.getBlockId(x, y, z)];
+		Block block = world.getBlock(x, y, z);
 		if (block == null)
 			return 1.0F;
 
-		if (block instanceof ShapedBlock && ((ShapedBlock) block).shaped
-				&& world.getBlockMetadata(x, y, z) == blockMetadata)
+		if (block instanceof IShapedBlock && ((IShapedBlock) block).isShaped() && world.getBlockMetadata(x, y, z) == blockMetadata)
 			return 1.0F;
 
-		return block.getAmbientOcclusionLightValue(world, x, y, z);
+		return block.getAmbientOcclusionLightValue();
 	}
 
+	@Override
 	public void drawFace(Face face, RenderParameters rp)
 	{
-		rp = new RenderParameters(rp);
-		rp.useBlockBounds = false;
-		rp.useBlockBrightness = true;
-		if (rp.textureSide == ForgeDirection.UP && isGrassBlock)
-			rp.colorMultiplier = colorMultiplier;
+		if (rp.textureSide.get() == ForgeDirection.UP && isGrassBlock)
+			rp.colorMultiplier.set(colorMultiplier);
 
 		super.drawFace(face, rp);
 
-		if (grassSideOverlay && rp.textureSide != ForgeDirection.UP
-				&& rp.textureSide != ForgeDirection.DOWN)
+		if (grassSideOverlay && rp.textureSide.get() != ForgeDirection.UP && rp.textureSide.get() != ForgeDirection.DOWN)
 		{
-			rp.icon = grassOverlayIcon;
-			rp.colorMultiplier = colorMultiplier;
+			rp.icon.set(grassOverlayIcon);
+			rp.colorMultiplier.set(colorMultiplier);
 			super.drawFace(face, rp);
 		}
 	}
 
-	//#region ISBRH
-
 	@Override
-	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer)
+	public void render()
 	{
-		reset().set(world, block, x, y, z, world.getBlockMetadata(x, y, z));
-		this.block = (ShapedBlock) block;
-
-		isGrassBlock = this.block.isShapedGrass();
+		isGrassBlock = block instanceof ShapedGrass;
 		grassSideOverlay = (isGrassBlock && RenderBlocks.fancyGrass);
-		if (isGrassBlock)
+		if (isGrassBlock && renderType == TYPE_ISBRH_WORLD)
 		{
 			grassOverlayIcon = BlockGrass.getIconSideOverlay();
 			colorMultiplier = block.colorMultiplier(world, x, y, z);
 		}
 
-		prepare(TYPE_WORLD);
-
 		Shape shape;
-		if (!this.block.shaped)
-			shape = Shape.Cube;
+		if (!((IShapedBlock) this.block).isShaped() || renderType != TYPE_ISBRH_WORLD)
+			shape = ShapePreset.Cube();
 		else
 		{
 			switch (blockMetadata)
 			{
-				case ShapedBlock.NORTHWEST:
-					shape = Shape.NorthWest;
+				case ShapedBlockManager.NORTHWEST:
+					shape = ShapePreset.NorthWest();
 					break;
-				case ShapedBlock.NORTHEAST:
-					shape = Shape.NorthEast;
+				case ShapedBlockManager.NORTHEAST:
+					shape = ShapePreset.NorthEast();
 					break;
-				case ShapedBlock.SOUTHWEST:
-					shape = Shape.SouthWest;
+				case ShapedBlockManager.SOUTHWEST:
+					shape = ShapePreset.SouthWest();
 					break;
-				case ShapedBlock.SOUTHEAST:
-					shape = Shape.SouthEast;
+				case ShapedBlockManager.SOUTHEAST:
+					shape = ShapePreset.SouthEast();
 					break;
-				case ShapedBlock.TOPNORTH:
-					shape = Shape.TopNorth;
+				case ShapedBlockManager.TOPNORTH:
+					shape = ShapePreset.TopNorth();
 					break;
-				case ShapedBlock.TOPSOUTH:
-					shape = Shape.TopSouth;
+				case ShapedBlockManager.TOPSOUTH:
+					shape = ShapePreset.TopSouth();
 					break;
-				case ShapedBlock.TOPWEST:
-					shape = Shape.TopWest;
+				case ShapedBlockManager.TOPWEST:
+					shape = ShapePreset.TopWest();
 					break;
-				case ShapedBlock.TOPEAST:
-					shape = Shape.TopEast;
+				case ShapedBlockManager.TOPEAST:
+					shape = ShapePreset.TopEast();
 					break;
-				case ShapedBlock.TOPNORTHEAST:
-					shape = Shape.TopNorthEast;
+				case ShapedBlockManager.TOPNORTHEAST:
+					shape = ShapePreset.TopNorthEast();
 					break;
-				case ShapedBlock.TOPNORTHWEST:
-					shape = Shape.TopNorthWest;
+				case ShapedBlockManager.TOPNORTHWEST:
+					shape = ShapePreset.TopNorthWest();
 					break;
-				case ShapedBlock.TOPSOUTHEAST:
-					shape = Shape.TopSouthEast;
+				case ShapedBlockManager.TOPSOUTHEAST:
+					shape = ShapePreset.TopSouthEast();
 					break;
-				case ShapedBlock.TOPSOUTHWEST:
-					shape = Shape.TopSouthWest;
+				case ShapedBlockManager.TOPSOUTHWEST:
+					shape = ShapePreset.TopSouthWest();
 					break;
-				case ShapedBlock.INVTOPNORTHEAST:
-					shape = Shape.InvTopNorthEast;
+				case ShapedBlockManager.INVTOPNORTHEAST:
+					shape = ShapePreset.InvTopNorthEast();
 					break;
-				case ShapedBlock.INVTOPNORTHWEST:
-					shape = Shape.InvTopNorthWest;
+				case ShapedBlockManager.INVTOPNORTHWEST:
+					shape = ShapePreset.InvTopNorthWest();
 					break;
-				case ShapedBlock.INVTOPSOUTHEAST:
-					shape = Shape.InvTopSouthEast;
+				case ShapedBlockManager.INVTOPSOUTHEAST:
+					shape = ShapePreset.InvTopSouthEast();
 					break;
-				case ShapedBlock.INVTOPSOUTHWEST:
-					shape = Shape.InvTopSouthWest;
+				case ShapedBlockManager.INVTOPSOUTHWEST:
+					shape = ShapePreset.InvTopSouthWest();
 					break;
 				default:
-					shape = Shape.Cube;
+					shape = ShapePreset.Cube();
 					break;
 
 			}
 		}
 
 		drawShape(shape);
-
-		clean();
-
-		return true;
-
 	}
 
 	@Override
-	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer)
-	{
-		reset().set(block, metadata);
-		this.block = (ShapedBlock) block;
-
-		isGrassBlock = this.block.isShapedGrass();
-		grassSideOverlay = false;// make sure the overlay is not drawn
-		if (isGrassBlock)
-		{
-			colorMultiplier = block.getRenderColor(0);
-		}
-
-		prepare(TYPE_INVENTORY);
-		drawShape(Shape.Cube);
-		clean();
-	}
-
-	@Override
-	public boolean shouldRender3DInInventory()
+	public boolean shouldRender3DInInventory(int modelId)
 	{
 		return true;
 	}
-
-	@Override
-	public int getRenderId()
-	{
-		return 0;
-	}
-
-	//#end ISBRH
 
 }

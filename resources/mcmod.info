@@ -3,20 +3,20 @@
   "modid": "malisisbt",
   "name": "Malisis' Better Terrain",
   "description": "Rendering API",
-  "version": "0.5",
+  "version": "${version}",
   "logoFile": "malisisbt.png",
-  "mcversion": "1.6.4",
+  "mcversion": "${mcversion}",
   "url": "http://github.com/ordinastie",
   "updateUrl": "",
   "authors": [ "Ordinastie" ],
   "parent":"",
   "screenshots": [],
-  "requiredMods" : [ "malisiscore@[1.6.4-0.5,]" ],
+  "requiredMods" : [ "malisiscore@[1.7.10-0.9.6,]" ],
   "dependencies": [
          "mod_MinecraftForge",
          "malisiscore"
 		],
-  "useDependencyInformation": "true"
+  "useDependencyInformation": "false"
 		
 }
 ]
