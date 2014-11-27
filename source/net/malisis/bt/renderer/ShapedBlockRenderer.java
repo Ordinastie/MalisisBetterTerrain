@@ -1,13 +1,13 @@
 package net.malisis.bt.renderer;
 
 import net.malisis.bt.block.IShapedBlock;
-import net.malisis.bt.block.ShapedBlockManager;
 import net.malisis.bt.block.ShapedGrass;
-import net.malisis.core.renderer.BaseRenderer;
+import net.malisis.core.renderer.MalisisRenderer;
 import net.malisis.core.renderer.RenderParameters;
+import net.malisis.core.renderer.RenderType;
 import net.malisis.core.renderer.element.Face;
 import net.malisis.core.renderer.element.Shape;
-import net.malisis.core.renderer.preset.ShapePreset;
+import net.malisis.core.renderer.element.shape.Cube;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockGrass;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -15,7 +15,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class ShapedBlockRenderer extends BaseRenderer
+public class ShapedBlockRenderer extends MalisisRenderer
 {
 	public static int renderId = 0;
 	private int colorMultiplier;
@@ -24,9 +24,8 @@ public class ShapedBlockRenderer extends BaseRenderer
 	private IIcon grassOverlayIcon = null;
 
 	@Override
-	protected void initParameters()
+	protected void initialize()
 	{
-		rp = new RenderParameters();
 		rp.useBlockBounds.set(false);
 		rp.useBlockBrightness.set(true);
 	}
@@ -68,16 +67,16 @@ public class ShapedBlockRenderer extends BaseRenderer
 	{
 		isGrassBlock = block instanceof ShapedGrass;
 		grassSideOverlay = (isGrassBlock && RenderBlocks.fancyGrass);
-		if (isGrassBlock && renderType == TYPE_ISBRH_WORLD)
+		if (isGrassBlock && renderType == RenderType.ISBRH_WORLD)
 		{
 			grassOverlayIcon = BlockGrass.getIconSideOverlay();
 			colorMultiplier = block.colorMultiplier(world, x, y, z);
 		}
 
-		Shape shape;
-		if (!((IShapedBlock) this.block).isShaped() || renderType != TYPE_ISBRH_WORLD)
-			shape = ShapePreset.Cube();
-		else
+		Shape shape = null;
+		if (!((IShapedBlock) this.block).isShaped() || renderType != RenderType.ISBRH_WORLD)
+			shape = new Cube();
+		/*else
 		{
 			switch (blockMetadata)
 			{
@@ -134,7 +133,7 @@ public class ShapedBlockRenderer extends BaseRenderer
 					break;
 
 			}
-		}
+		}*/
 
 		drawShape(shape);
 	}
