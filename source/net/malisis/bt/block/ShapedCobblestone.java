@@ -3,7 +3,6 @@ package net.malisis.bt.block;
 import java.util.List;
 import java.util.Random;
 
-import net.malisis.bt.renderer.ShapedBlockRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -16,6 +15,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class ShapedCobblestone extends Block implements IShapedBlock
 {
+	public static int renderId = 1;
 	public Block originalBlock;
 	public boolean shaped;
 
@@ -32,7 +32,7 @@ public class ShapedCobblestone extends Block implements IShapedBlock
 		setStepSound(soundTypePiston);
 
 		setCreativeTab(CreativeTabs.tabBlock);
-		setTickRandomly(true);
+		//setTickRandomly(true);
 	}
 
 	@Override
@@ -102,7 +102,7 @@ public class ShapedCobblestone extends Block implements IShapedBlock
 	@Override
 	public int getRenderType()
 	{
-		return ShapedBlockRenderer.renderId;
+		return renderId;
 	}
 
 	@Override

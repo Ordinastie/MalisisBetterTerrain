@@ -8,10 +8,8 @@ import net.malisis.bt.block.ShapedGrass;
 import net.malisis.bt.block.ShapedGravel;
 import net.malisis.bt.block.ShapedSand;
 import net.malisis.bt.block.ShapedStone;
-import net.malisis.bt.renderer.FiniteLiquidRenderer;
 import net.malisis.bt.renderer.ShapedBlockRenderer;
 import net.minecraft.block.Block;
-import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -47,8 +45,9 @@ public class MalisisBetterTerrain
 	{
 		if (event.getSide() == Side.CLIENT)
 		{
-			RenderingRegistry.registerBlockHandler(new ShapedBlockRenderer());
-			RenderingRegistry.registerBlockHandler(new FiniteLiquidRenderer());
+			new ShapedBlockRenderer().registerFor(ShapedCobblestone.class, ShapedDirt.class, ShapedGrass.class, ShapedGravel.class,
+					ShapedSand.class, ShapedStone.class);
+			//RenderingRegistry.registerBlockHandler(new FiniteLiquidRenderer());
 		}
 
 		ShapedBlockManager.register(ShapedStone.class);

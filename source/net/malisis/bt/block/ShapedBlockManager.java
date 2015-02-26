@@ -4,7 +4,7 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.List;
 
-import net.malisis.core.MalisisCore;
+import net.malisis.core.ReplacementTool;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.util.AxisAlignedBB;
@@ -47,6 +47,7 @@ public class ShapedBlockManager
 
 	public static void setMetadata(World world, int x, int y, int z, IShapedBlock block)
 	{
+
 		if (neighborUpdated++ >= MAX_NEIGHBOR_UPDATE_COUNT)
 			world.scheduleBlockUpdate(x, y, z, (Block) block, 5);
 		else
@@ -312,10 +313,11 @@ public class ShapedBlockManager
 			IShapedBlock shaped = ctr.newInstance(true);
 
 			String name = ((Block) normal).getUnlocalizedName().substring(5);
-			if(name.equals("stonebrick"))
+			if (name.equals("stonebrick"))
 				name = "cobblestone";
 
-			MalisisCore.replaceVanillaBlock(Block.getIdFromBlock(normal.getOriginalBlock()), name, normal.getSrgName(), (Block) normal, normal.getOriginalBlock());
+			ReplacementTool.replaceVanillaBlock(Block.getIdFromBlock(normal.getOriginalBlock()), name, normal.getSrgName(), (Block) normal,
+					normal.getOriginalBlock());
 			GameRegistry.registerBlock((Block) shaped, name + "_shaped");
 
 			blockMap.put(normal, shaped);

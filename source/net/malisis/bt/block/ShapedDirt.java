@@ -3,7 +3,6 @@ package net.malisis.bt.block;
 import java.util.List;
 import java.util.Random;
 
-import net.malisis.bt.renderer.ShapedBlockRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.entity.Entity;
@@ -15,6 +14,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class ShapedDirt extends BlockDirt implements IShapedBlock
 {
+	public static int renderId = 1;
 	public Block originalBlock;
 	public boolean shaped;
 
@@ -23,14 +23,15 @@ public class ShapedDirt extends BlockDirt implements IShapedBlock
 		super();
 		this.originalBlock = Blocks.dirt;
 		this.shaped = shaped;
-		
+
 		setBlockName("dirt");
 		setBlockTextureName("dirt");
-		
+
 		setHardness(0.5F);
 		setStepSound(soundTypeGravel);
-		setTickRandomly(true);
+		//setTickRandomly(true);
 	}
+
 	@Override
 	public String getSrgName()
 	{
@@ -98,7 +99,7 @@ public class ShapedDirt extends BlockDirt implements IShapedBlock
 	@Override
 	public int getRenderType()
 	{
-		return ShapedBlockRenderer.renderId;
+		return renderId;
 	}
 
 	@Override

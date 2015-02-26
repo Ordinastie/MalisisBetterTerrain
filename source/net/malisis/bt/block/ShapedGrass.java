@@ -3,7 +3,6 @@ package net.malisis.bt.block;
 import java.util.List;
 import java.util.Random;
 
-import net.malisis.bt.renderer.ShapedBlockRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockGrass;
 import net.minecraft.entity.Entity;
@@ -15,6 +14,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class ShapedGrass extends BlockGrass implements IShapedBlock
 {
+	public static int renderId = 1;
 	public Block originalBlock;
 	public boolean shaped;
 
@@ -23,21 +23,20 @@ public class ShapedGrass extends BlockGrass implements IShapedBlock
 		super();
 		this.originalBlock = Blocks.grass;
 		this.shaped = shaped;
-		
+
 		setBlockName("grass");
 		setBlockTextureName("grass");
-		
+
 		setHardness(0.6F);
 		setStepSound(soundTypeGrass);
 	}
-	
+
 	@Override
 	public String getSrgName()
 	{
 		return "field_150349_c";
 	}
 
-	
 	@Override
 	public Block getOriginalBlock()
 	{
@@ -99,7 +98,7 @@ public class ShapedGrass extends BlockGrass implements IShapedBlock
 	@Override
 	public int getRenderType()
 	{
-		return ShapedBlockRenderer.renderId;
+		return renderId;
 	}
 
 	@Override

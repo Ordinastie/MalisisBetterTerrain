@@ -1,13 +1,31 @@
 package net.malisis.bt.renderer;
 
 import net.malisis.bt.block.IShapedBlock;
+import net.malisis.bt.block.ShapedBlockManager;
 import net.malisis.bt.block.ShapedGrass;
+import net.malisis.bt.renderer.shape.InvTopNorthEastShape;
+import net.malisis.bt.renderer.shape.InvTopNorthWestShape;
+import net.malisis.bt.renderer.shape.InvTopSouthEastShape;
+import net.malisis.bt.renderer.shape.InvTopSouthWestShape;
+import net.malisis.bt.renderer.shape.NorthEastShape;
+import net.malisis.bt.renderer.shape.NorthWestShape;
+import net.malisis.bt.renderer.shape.SouthEastShape;
+import net.malisis.bt.renderer.shape.SouthWestShape;
+import net.malisis.bt.renderer.shape.TopEastShape;
+import net.malisis.bt.renderer.shape.TopNorthEastShape;
+import net.malisis.bt.renderer.shape.TopNorthShape;
+import net.malisis.bt.renderer.shape.TopNorthWestShape;
+import net.malisis.bt.renderer.shape.TopSouthEastShape;
+import net.malisis.bt.renderer.shape.TopSouthShape;
+import net.malisis.bt.renderer.shape.TopSouthWestShape;
+import net.malisis.bt.renderer.shape.TopWestShape;
 import net.malisis.core.renderer.MalisisRenderer;
 import net.malisis.core.renderer.RenderParameters;
 import net.malisis.core.renderer.RenderType;
 import net.malisis.core.renderer.element.Face;
 import net.malisis.core.renderer.element.Shape;
 import net.malisis.core.renderer.element.shape.Cube;
+import net.malisis.core.renderer.element.shape.CubeSides;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockGrass;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -23,11 +41,77 @@ public class ShapedBlockRenderer extends MalisisRenderer
 	private boolean grassSideOverlay = false;
 	private IIcon grassOverlayIcon = null;
 
+	private Shape[] shapes;
+	private Shape cube;
+	private Shape cubeSide;
+
 	@Override
 	protected void initialize()
 	{
-		rp.useBlockBounds.set(false);
-		rp.useBlockBrightness.set(true);
+		cube = new Cube();
+		cubeSide = new CubeSides();
+		Shape shape;
+		shapes = new Shape[16];
+		for (int i = 0; i < 16; i++)
+		{
+			switch (i)
+			{
+				case ShapedBlockManager.NORTHWEST:
+					shape = new NorthWestShape();
+					break;
+				case ShapedBlockManager.NORTHEAST:
+					shape = new NorthEastShape();
+					break;
+				case ShapedBlockManager.SOUTHWEST:
+					shape = new SouthWestShape();
+					break;
+				case ShapedBlockManager.SOUTHEAST:
+					shape = new SouthEastShape();
+					break;
+				case ShapedBlockManager.TOPNORTH:
+					shape = new TopNorthShape();
+					break;
+				case ShapedBlockManager.TOPSOUTH:
+					shape = new TopSouthShape();
+					break;
+				case ShapedBlockManager.TOPWEST:
+					shape = new TopWestShape();
+					break;
+				case ShapedBlockManager.TOPEAST:
+					shape = new TopEastShape();
+					break;
+				case ShapedBlockManager.TOPNORTHEAST:
+					shape = new TopNorthEastShape();
+					break;
+				case ShapedBlockManager.TOPNORTHWEST:
+					shape = new TopNorthWestShape();
+					break;
+				case ShapedBlockManager.TOPSOUTHEAST:
+					shape = new TopSouthEastShape();
+					break;
+				case ShapedBlockManager.TOPSOUTHWEST:
+					shape = new TopSouthWestShape();
+					break;
+				case ShapedBlockManager.INVTOPNORTHEAST:
+					shape = new InvTopNorthEastShape();
+					break;
+				case ShapedBlockManager.INVTOPNORTHWEST:
+					shape = new InvTopNorthWestShape();
+					break;
+				case ShapedBlockManager.INVTOPSOUTHEAST:
+					shape = new InvTopSouthEastShape();
+					break;
+				case ShapedBlockManager.INVTOPSOUTHWEST:
+					shape = new InvTopSouthWestShape();
+					break;
+				default:
+					shape = new Cube();
+					break;
+			}
+			shape.storeState();
+			shapes[i] = shape;
+		}
+
 	}
 
 	/**
@@ -47,95 +131,61 @@ public class ShapedBlockRenderer extends MalisisRenderer
 	}
 
 	@Override
-	public void drawFace(Face face, RenderParameters rp)
+	public void drawFace(Face face, RenderParameters params)
 	{
-		if (rp.textureSide.get() == ForgeDirection.UP && isGrassBlock)
-			rp.colorMultiplier.set(colorMultiplier);
-
-		super.drawFace(face, rp);
-
-		if (grassSideOverlay && rp.textureSide.get() != ForgeDirection.UP && rp.textureSide.get() != ForgeDirection.DOWN)
+		if (isGrassBlock)
 		{
-			rp.icon.set(grassOverlayIcon);
-			rp.colorMultiplier.set(colorMultiplier);
-			super.drawFace(face, rp);
+			if (params.textureSide.get() == ForgeDirection.UP || rp.icon.get() == grassOverlayIcon)
+				params.colorMultiplier.set(colorMultiplier);
+			else
+				params.colorMultiplier.set(0xFFFFFF);
 		}
+
+		super.drawFace(face, params);
+
+		params.colorMultiplier.reset();
+		params.icon.reset();
 	}
 
 	@Override
 	public void render()
 	{
+		rp.reset();
+		rp.useBlockBounds.set(false);
+		rp.useBlockBrightness.set(true);
+
+		if (renderType == RenderType.ISBRH_INVENTORY)
+		{
+			//drawShape(new Cube(), new RenderParameters());
+			return;
+		}
+
 		isGrassBlock = block instanceof ShapedGrass;
-		grassSideOverlay = (isGrassBlock && RenderBlocks.fancyGrass);
+		grassSideOverlay = (isGrassBlock && RenderBlocks.fancyGrass && renderType == RenderType.ISBRH_WORLD);
 		if (isGrassBlock && renderType == RenderType.ISBRH_WORLD)
 		{
 			grassOverlayIcon = BlockGrass.getIconSideOverlay();
 			colorMultiplier = block.colorMultiplier(world, x, y, z);
 		}
 
-		Shape shape = null;
 		if (!((IShapedBlock) this.block).isShaped() || renderType != RenderType.ISBRH_WORLD)
-			shape = new Cube();
-		/*else
 		{
-			switch (blockMetadata)
+			cube.resetState();
+			drawShape(cube);
+			if (grassSideOverlay)
 			{
-				case ShapedBlockManager.NORTHWEST:
-					shape = ShapePreset.NorthWest();
-					break;
-				case ShapedBlockManager.NORTHEAST:
-					shape = ShapePreset.NorthEast();
-					break;
-				case ShapedBlockManager.SOUTHWEST:
-					shape = ShapePreset.SouthWest();
-					break;
-				case ShapedBlockManager.SOUTHEAST:
-					shape = ShapePreset.SouthEast();
-					break;
-				case ShapedBlockManager.TOPNORTH:
-					shape = ShapePreset.TopNorth();
-					break;
-				case ShapedBlockManager.TOPSOUTH:
-					shape = ShapePreset.TopSouth();
-					break;
-				case ShapedBlockManager.TOPWEST:
-					shape = ShapePreset.TopWest();
-					break;
-				case ShapedBlockManager.TOPEAST:
-					shape = ShapePreset.TopEast();
-					break;
-				case ShapedBlockManager.TOPNORTHEAST:
-					shape = ShapePreset.TopNorthEast();
-					break;
-				case ShapedBlockManager.TOPNORTHWEST:
-					shape = ShapePreset.TopNorthWest();
-					break;
-				case ShapedBlockManager.TOPSOUTHEAST:
-					shape = ShapePreset.TopSouthEast();
-					break;
-				case ShapedBlockManager.TOPSOUTHWEST:
-					shape = ShapePreset.TopSouthWest();
-					break;
-				case ShapedBlockManager.INVTOPNORTHEAST:
-					shape = ShapePreset.InvTopNorthEast();
-					break;
-				case ShapedBlockManager.INVTOPNORTHWEST:
-					shape = ShapePreset.InvTopNorthWest();
-					break;
-				case ShapedBlockManager.INVTOPSOUTHEAST:
-					shape = ShapePreset.InvTopSouthEast();
-					break;
-				case ShapedBlockManager.INVTOPSOUTHWEST:
-					shape = ShapePreset.InvTopSouthWest();
-					break;
-				default:
-					shape = ShapePreset.Cube();
-					break;
-
+				rp.icon.set(grassOverlayIcon);
+				rp.colorMultiplier.set(colorMultiplier);
+				cubeSide.resetState();
+				drawShape(cubeSide, rp);
 			}
-		}*/
+		}
+		else
+		{
+			shapes[blockMetadata].resetState();
+			drawShape(shapes[blockMetadata]);
+		}
 
-		drawShape(shape);
 	}
 
 	@Override

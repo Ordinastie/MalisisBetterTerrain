@@ -37,8 +37,8 @@ public class NorthEastFace extends Face
 {
 	public NorthEastFace()
 	{
-		super(new Vertex[] { new Vertex.TopNorthWest(), new Vertex.BottomNorthWest(), new Vertex.BottomSouthEast(),
-				new Vertex.TopSouthEast() });
+		super(new Vertex[] { new Vertex.TopSouthEast(), new Vertex.BottomSouthEast(), new Vertex.BottomNorthWest(),
+				new Vertex.TopNorthWest() });
 
 		params.direction.set(EAST);
 		params.textureSide.set(EAST);

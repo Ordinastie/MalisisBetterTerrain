@@ -3,7 +3,6 @@ package net.malisis.bt.block;
 import java.util.List;
 import java.util.Random;
 
-import net.malisis.bt.renderer.ShapedBlockRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSand;
 import net.minecraft.entity.Entity;
@@ -15,6 +14,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class ShapedSand extends BlockSand implements IShapedBlock
 {
+	public static int renderId = 1;
 	public Block originalBlock;
 	public boolean shaped;
 
@@ -28,7 +28,7 @@ public class ShapedSand extends BlockSand implements IShapedBlock
 		setBlockTextureName("sand");
 		setHardness(0.5F);
 		setStepSound(soundTypeSand);
-		setTickRandomly(true);
+		//setTickRandomly(true);
 	}
 
 	@Override
@@ -98,7 +98,7 @@ public class ShapedSand extends BlockSand implements IShapedBlock
 	@Override
 	public int getRenderType()
 	{
-		return ShapedBlockRenderer.renderId;
+		return renderId;
 	}
 
 	@Override
