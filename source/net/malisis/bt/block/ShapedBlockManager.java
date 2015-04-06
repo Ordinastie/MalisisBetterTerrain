@@ -4,7 +4,7 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.List;
 
-import net.malisis.core.ReplacementTool;
+import net.malisis.core.util.replacement.ReplacementTool;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.util.AxisAlignedBB;

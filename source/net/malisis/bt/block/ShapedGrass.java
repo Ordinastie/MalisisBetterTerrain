@@ -24,8 +24,8 @@ public class ShapedGrass extends BlockGrass implements IShapedBlock
 		this.originalBlock = Blocks.grass;
 		this.shaped = shaped;
 
-		setBlockName("grass");
-		setBlockTextureName("grass");
+		setUnlocalizedName("grass");
+		setTextureName("grass");
 
 		setHardness(0.6F);
 		setStepSound(soundTypeGrass);

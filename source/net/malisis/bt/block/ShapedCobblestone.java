@@ -25,8 +25,8 @@ public class ShapedCobblestone extends Block implements IShapedBlock
 		this.originalBlock = Blocks.cobblestone;
 		this.shaped = shaped;
 
-		setBlockName("stonebrick");
-		setBlockTextureName("cobblestone");
+		setUnlocalizedName("stonebrick");
+		setTextureName("cobblestone");
 		setHardness(2.0F);
 		setResistance(10.0F);
 		setStepSound(soundTypePiston);

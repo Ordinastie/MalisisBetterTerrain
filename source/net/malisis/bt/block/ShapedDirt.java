@@ -24,8 +24,8 @@ public class ShapedDirt extends BlockDirt implements IShapedBlock
 		this.originalBlock = Blocks.dirt;
 		this.shaped = shaped;
 
-		setBlockName("dirt");
-		setBlockTextureName("dirt");
+		setUnlocalizedName("dirt");
+		setTextureName("dirt");
 
 		setHardness(0.5F);
 		setStepSound(soundTypeGravel);

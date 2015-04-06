@@ -24,8 +24,8 @@ public class ShapedSand extends BlockSand implements IShapedBlock
 		this.originalBlock = Blocks.sand;
 		this.shaped = shaped;
 
-		setBlockName("sand");
-		setBlockTextureName("sand");
+		setUnlocalizedName("sand");
+		setTextureName("sand");
 		setHardness(0.5F);
 		setStepSound(soundTypeSand);
 		//setTickRandomly(true);

@@ -24,8 +24,8 @@ public class ShapedGravel extends BlockGravel implements IShapedBlock
 		this.originalBlock = Blocks.gravel;
 		this.shaped = shaped;
 
-		setBlockName("gravel");
-		setBlockTextureName("gravel");
+		setUnlocalizedName("gravel");
+		setTextureName("gravel");
 		setHardness(0.6F);
 		setStepSound(soundTypeGravel);
 		//setTickRandomly(true);

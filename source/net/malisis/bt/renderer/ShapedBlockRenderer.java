@@ -154,12 +154,6 @@ public class ShapedBlockRenderer extends MalisisRenderer
 		rp.useBlockBounds.set(false);
 		rp.useBlockBrightness.set(true);
 
-		if (renderType == RenderType.ISBRH_INVENTORY)
-		{
-			//drawShape(new Cube(), new RenderParameters());
-			return;
-		}
-
 		isGrassBlock = block instanceof ShapedGrass;
 		grassSideOverlay = (isGrassBlock && RenderBlocks.fancyGrass && renderType == RenderType.ISBRH_WORLD);
 		if (isGrassBlock && renderType == RenderType.ISBRH_WORLD)
@@ -186,6 +180,12 @@ public class ShapedBlockRenderer extends MalisisRenderer
 			drawShape(shapes[blockMetadata]);
 		}
 
+	}
+
+	@Override
+	public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer)
+	{
+		renderer.renderBlockAsItem(((IShapedBlock) block).getOriginalBlock(), metadata, 1);
 	}
 
 	@Override

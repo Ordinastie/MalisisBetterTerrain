@@ -24,8 +24,8 @@ public class ShapedStone extends BlockStone implements IShapedBlock
 		this.originalBlock = Blocks.stone;
 		this.shaped = shaped;
 
-		setBlockName("stone");
-		setBlockTextureName("stone");
+		setUnlocalizedName("stone");
+		setTextureName("stone");
 		setHardness(1.5F);
 		setResistance(10.0F);
 		setStepSound(soundTypePiston);
