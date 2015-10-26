@@ -152,7 +152,7 @@ public class ShapedBlockRenderer extends MalisisRenderer
 	{
 		rp.reset();
 		rp.useBlockBounds.set(false);
-		rp.useBlockBrightness.set(true);
+		rp.useEnvironmentBrightness.set(true);
 
 		isGrassBlock = block instanceof ShapedGrass;
 		grassSideOverlay = (isGrassBlock && RenderBlocks.fancyGrass && renderType == RenderType.ISBRH_WORLD);

@@ -1,6 +1,5 @@
 package net.malisis.bt;
 
-import net.malisis.bt.block.FiniteLiquid;
 import net.malisis.bt.block.ShapedBlockManager;
 import net.malisis.bt.block.ShapedCobblestone;
 import net.malisis.bt.block.ShapedDirt;
@@ -8,7 +7,6 @@ import net.malisis.bt.block.ShapedGrass;
 import net.malisis.bt.block.ShapedGravel;
 import net.malisis.bt.block.ShapedSand;
 import net.malisis.bt.block.ShapedStone;
-import net.malisis.bt.renderer.FiniteLiquidRenderer;
 import net.malisis.bt.renderer.ShapedBlockRenderer;
 import net.minecraft.block.Block;
 import cpw.mods.fml.common.Mod;
@@ -48,7 +46,7 @@ public class MalisisBetterTerrain
 		{
 			new ShapedBlockRenderer().registerFor(ShapedCobblestone.class, ShapedDirt.class, ShapedGrass.class, ShapedGravel.class,
 					ShapedSand.class, ShapedStone.class);
-			new FiniteLiquidRenderer().registerFor(FiniteLiquid.class);
+			//new FiniteLiquidRenderer().registerFor(FiniteLiquid.class);
 		}
 
 		ShapedBlockManager.register(ShapedStone.class);
@@ -58,7 +56,7 @@ public class MalisisBetterTerrain
 		ShapedBlockManager.register(ShapedSand.class);
 		ShapedBlockManager.register(ShapedGravel.class);
 
-		finiteWater = new FiniteLiquid();
+		//finiteWater = new FiniteLiquid();
 		//ReplacementTool.replaceVanillaBlock(Block.getIdFromBlock(Blocks.water), "water", "", finiteWater, Blocks.water);
 		GameRegistry.registerBlock(finiteWater, finiteWater.getUnlocalizedName().substring(5));
 
